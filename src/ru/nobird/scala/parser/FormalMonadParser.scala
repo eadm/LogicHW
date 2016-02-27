@@ -2,45 +2,12 @@ package ru.nobird.scala.parser
 
 import ru.nobird.scala.expression.formal._
 import ru.nobird.scala.expression._
-import ru.nobird.scala.hw.{HW2, HW4}
-import ru.nobird.scala.logic.{Classic, Formal}
 
-import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by ruslandavletshin on 20/02/16.
   */
 object FormalMonadParser {
-    def main(args: Array[String]) {
-
-//        println(parseLine("P(a)->Q(a)").get.equals(parseLine("P(a)->Q(a)").get))
-
-//        val proof = ClassicMonadParser.parseLines(List(
-//            "P(a)->(A->A->A)->P(b)",
-//            "A(z)->B(x)"
-//        ), parseLine)
-
-//        println(Formal.checkExistenceQuantifierRule(proof, parseLine("?a(P(a))->(A->A->A)->P(b)").get))
-//    println(Formal.check12Scheme(parseLine("(a+0'=0')->?b(a+b=0')").get))
-
-        println(HW4.permutation(new Variable("A"), new Variable("B"), new Variable("C")))
-
-        println(HW4.deductionToTheEnd(
-            List(
-                new Implication(new Variable("A"), new Brackets(new Implication(new Variable("B"), new Variable("C")))),
-                new Variable("B"),
-                new Variable("A")
-            ),
-            ArrayBuffer[Expression](
-                new Implication(new Variable("A"), new Brackets(new Implication(new Variable("B"), new Variable("C")))),
-                new Variable("A"),
-                new Implication(new Variable("B"), new Variable("C")),
-                new Variable("B"),
-                new Variable("C")
-            )
-        ))
-    }
-
     def parseLine(s: String): Option[Expression] = {
         getFormalExpressionParser(s) match {
             case x :: _ => new Some[Expression](x._1)
@@ -138,7 +105,7 @@ object FormalMonadParser {
             a <- ClassicMonadParser.plus[Expression](
                 for {
                     b       <- func()
-                    ss      <- ClassicMonadParser.many(for {_ <- ClassicMonadParser.sym(''')} yield 0)
+                    ss      <- ClassicMonadParser.many(for {_ <- ClassicMonadParser.str("'")} yield 0)
                 } yield (b /: ss)((b, _) => new Suc(b)), // fold left
                 func()
             )
