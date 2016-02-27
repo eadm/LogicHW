@@ -3,7 +3,7 @@ package ru.nobird.scala.hw
 import java.io.FileWriter
 
 import ru.nobird.scala.Reader
-import ru.nobird.scala.expression.Expression
+import ru.nobird.scala.expression.{ExpressionType, None, Variable, Expression}
 import ru.nobird.scala.logic.Classic
 import ru.nobird.scala.parser.ClassicMonadParser
 
@@ -35,13 +35,20 @@ object HW1 extends HW {
         val parser = ClassicMonadParser.createExpressionParser()
         val axioms = Classic.schemas()
 
-        val (target :: assumptions) = headerParser(reader.readLine()).head._1
-
         val proof = ArrayBuffer[Expression]()
+
+        val header = reader.readLine()
+        val (target :: assumptions) = headerParser(header) match {
+            case a :: _ => a._1
+            case default =>
+                println("Header not found")
+                List(new None())
+        }
 
         var last = time
 
         var i = 0
+        if (target.getType != ExpressionType.None)
         while (reader.ready()) {
             val s = reader.readLine()
             i += 1
