@@ -26,6 +26,7 @@ object HW3 extends HW {
         ) target.execute(vv) match {
                 case Some(false) =>
                     println("Высказывание ложно при" + vv.foldLeft("")((s, v) => s + " " + v._1 + "=" + (if(v._2) "И" else "Л") ))
+                    writer.write("Высказывание ложно при" + vv.foldLeft("")((s, v) => s + " " + v._1 + "=" + (if(v._2) "И" else "Л") ))
                     wrong = true
 
                 case default =>
